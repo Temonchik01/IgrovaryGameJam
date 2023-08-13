@@ -8,10 +8,8 @@ public class PlayerTeleporter : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            if (currentTeleporter != null)
-            {
+        if (Input.GetKeyDown(KeyCode.E))    {
+            if (currentTeleporter != null)  {
                 transform.position = currentTeleporter.GetComponent<Teleporter>().GetDestination().position;
             }
         }

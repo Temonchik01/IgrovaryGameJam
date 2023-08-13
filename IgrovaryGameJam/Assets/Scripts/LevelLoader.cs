@@ -1,0 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class LevelLoader : MonoBehaviour
+{   
+    [SerializeField] private int nextLevelName;
+
+    public void LoadScene() {
+        SceneManager.LoadScene(nextLevelName);
+    }
+}

@@ -8,6 +8,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float speed = 8f;
     [SerializeField] private float jumpingPower = 16f;
     [SerializeField] private bool isFacingRight = true;
+    public bool loadSceneReady = true;
 
     public bool canDash = true;
     [SerializeField] private bool isDashing;
@@ -19,8 +20,11 @@ public class Movement : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private TrailRenderer tr;
+    [SerializeField] private AudioManager audioManager;
 
-
+    void Awake() {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
     void Start() {
         tr.emitting = false;
     }
@@ -30,10 +34,16 @@ public class Movement : MonoBehaviour
             return;
         }
 
+
+        if (Input.GetKeyDown(KeyCode.E)) {
+            loadSceneReady = true;
+        }
+
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetButtonDown("Jump") && IsGrounded()) {
+        if(Input.GetButtonDown("Jump") && IsGrounded()) {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            audioManager.PlaySFX(audioManager.Jump);
         }
 
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f) {
@@ -41,6 +51,7 @@ public class Movement : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && canDash) {
+            audioManager.PlaySFX(audioManager.Dash);
             StartCoroutine(Dash());
         }
 
@@ -62,6 +73,7 @@ public class Movement : MonoBehaviour
     private void Flip() {
         if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
         {
+            audioManager.PlaySFX(audioManager.Walk);
             Vector3 localScale = transform.localScale;
             isFacingRight = !isFacingRight;
             localScale.x *= -1f;  
